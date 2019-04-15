@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,25 +7,40 @@
     tools:context=".MainActivity"
     android:orientation="vertical"
     android:background="@color/darkblue">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:id="@+id/title"
         android:text="Fish Bowl"
         android:textColor="@color/offwhite"
         android:textSize="50dp"
-        app:fontFamily="@font/coiny" />
-
+        app:fontFamily="@font/coiny"
+        android:layout_centerHorizontal="true"/>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_below="@+id/title"
+    android:layout_centerHorizontal="true">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:id="@+id/newGame"
         android:background="@color/blue"
         android:text="New Game"
-        android:textColor="@color/offwhite" />
-
+        android:textColor="@color/offwhite"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:text="Options"
+        android:textColor="@color/offwhite"
+        android:layout_marginLeft="10dp"/>
 </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
+</RelativeLayout>
