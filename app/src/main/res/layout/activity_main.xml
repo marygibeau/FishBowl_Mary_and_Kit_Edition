@@ -30,9 +30,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/newGame"
         android:background="@color/blue"
         android:text="New Game"
+        android:onClick="changeToTeamNum"
         android:textColor="@color/offwhite"/>
     <Button
         android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
         android:background="@color/blue"
         android:text="Options"
         android:textColor="@color/offwhite"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp" />
 </LinearLayout>
 </RelativeLayout>
 </RelativeLayout>

@@ -20,13 +20,15 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:id="@+id/teamNum"
+            android:id="@+id/wordNumber"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="@color/offwhite"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/continue3"
+            android:onClick="changeToEnterWords"
             android:textColor="@color/offwhite"
             android:background="@color/blue"
             android:layout_gravity="center_horizontal"
