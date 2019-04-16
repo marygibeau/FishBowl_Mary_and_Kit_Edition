@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         instruct.setText(players.get(currentPlayer).getName() + " provide a word for the game");
         TextView wordCountLabel = findViewById(R.id.wordCountLabel);
         wordCountLabel.setText("0/" + wordsPP);
+        currentWordsEntered = 0;
     }
 
     void changeToConfirmationScreenOrStay(View v) {
