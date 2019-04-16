@@ -98,13 +98,17 @@ public class MainActivity extends AppCompatActivity {
             this.toastHelper("number successfully entered");
             currentWords = new String[wordsPP];
             setContentView(R.layout.enter_word);
-            TextView instruct = findViewById(R.id.instructions);
-            instruct.setText(players.get(currentPlayer).getName() + " provide a word for the game");
-            TextView wordCountLabel = findViewById(R.id.wordCountLabel);
-            wordCountLabel.setText("0/" + wordsPP);
+            initEnterWordsView();
         } else {
             this.toastHelper("Please enter a number");
         }
+    }
+
+    void initEnterWordsView() {
+        TextView instruct = findViewById(R.id.instructions);
+        instruct.setText(players.get(currentPlayer).getName() + " provide a word for the game");
+        TextView wordCountLabel = findViewById(R.id.wordCountLabel);
+        wordCountLabel.setText("0/" + wordsPP);
     }
 
     void changeToConfirmationScreenOrStay(View v) {
@@ -198,8 +202,10 @@ public class MainActivity extends AppCompatActivity {
             // start game
         } else {
             // go to next player
-            // setContentView(R.layout.enter_words);
+            currentPlayer++;
+             setContentView(R.layout.enter_word);
             // reset ui for enter_words
+            initEnterWordsView();
         }
     }
 
