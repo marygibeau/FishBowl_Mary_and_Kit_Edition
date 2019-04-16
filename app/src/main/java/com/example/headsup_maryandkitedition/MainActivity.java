@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.headsup_maryandkitedition.database.DatabaseHelper;
+import com.example.headsup_maryandkitedition.database.model.WordInstance;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -192,7 +193,8 @@ public class MainActivity extends AppCompatActivity {
         // insert words in db
         db = new DatabaseHelper(getApplicationContext());
         for (String word : currentWords) db.createWord(word, players.get(currentPlayer).getName());
-
+        printWordTable(db.getAllWords());
+        
         // logic for going to next player for words or starting game
         if (currentPlayer == players.size() - 1) {
             // start game
@@ -220,5 +222,15 @@ public class MainActivity extends AppCompatActivity {
     void toastHelper(String s) {
         Toast warning = Toast.makeText(this, s , Toast.LENGTH_LONG);
         warning.show();
+    }
+
+    private void printWordTable(List<WordInstance> words) {
+        String res = "\n-----Word Table-----\n";
+
+        for (WordInstance w : words) {
+            res += w.toString();
+        }
+
+        Log.v("DBTEST", res);
     }
 }
