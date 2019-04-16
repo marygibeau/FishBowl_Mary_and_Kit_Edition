@@ -3,8 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="blue">#07A0C3</color>
-    <color name="darkblue">#086788</color>
-    <color name="offwhite">#FFF1D0</color>
-    <color name="cream">#F2F3AE</color>
+    <color name="livid">#62B6CB</color>
+    <color name="darkImperialBlue">#1B4965</color>
+    <color name="paleCyan">#97D2FB</color>
+    <color name="veryLightAzure">#83BCFF</color>
+    <color name="aquamarine">#80FFE8</color>
 </resources>

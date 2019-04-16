@@ -56,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
     void changeToNumberOfWordsOrStay(View v) {
         TextView instruct = findViewById(R.id.teamNumber);
         if(currentTeam >= numberOfTeams) {
+            EditText result = findViewById(R.id.teamNames);
+            if (!result.getText().toString().equals("")) {
+                String[] names = result.getText().toString().split(";");
+                Log.v("test", "" + names.length);
+                for (String name : names) {
+                    Player cPlayer = new Player(name, currentTeam);
+                    players.add(cPlayer);
+                    this.toastHelper("Please enter players' names");
+                }
+                currentTeam++;
+                instruct.setText("Team " + currentTeam);
+                result.setText("");
+            } else {
+            }
             setContentView(R.layout.number_of_words);
         } else {
             EditText result = findViewById(R.id.teamNames);
@@ -63,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 String[] names = result.getText().toString().split(";");
                 Log.v("test", "" + names.length);
                 for (String name : names) {
-                    Player currentPlayer = new Player(name, currentTeam);
-                    players.add(currentPlayer);
+                    Player cPlayer = new Player(name, currentTeam);
+                    players.add(cPlayer);
                 }
                 currentTeam++;
                 instruct.setText("Team " + currentTeam);
@@ -77,11 +91,17 @@ public class MainActivity extends AppCompatActivity {
 
     void changeToEnterWords(View v) {
         EditText result = findViewById(R.id.wordNumber);
+        Log.v("test", "Length of players: " + players.size());
         if (!result.getText().toString().equals("")) {
             wordsPP = Integer.parseInt(result.getText().toString());
             Log.v("test", "the number of words is: " + wordsPP);
             this.toastHelper("number successfully entered");
+            currentWords = new String[wordsPP];
             setContentView(R.layout.enter_word);
+            TextView instruct = findViewById(R.id.instructions);
+            instruct.setText(players.get(currentPlayer).getName() + " provide a word for the game");
+            TextView wordCountLabel = findViewById(R.id.wordCountLabel);
+            wordCountLabel.setText("0/" + wordsPP);
         } else {
             this.toastHelper("Please enter a number");
         }
@@ -172,6 +192,30 @@ public class MainActivity extends AppCompatActivity {
             res += "    " + words[i];
         }
         return res;
+    }
+
+    void changeToConfirmationScreenOrStay(View v) {
+        EditText result = findViewById(R.id.wordInputBox);
+        TextView currentWordLabel = findViewById(R.id.wordCountLabel);
+        if(currentWordsEntered >= wordsPP - 1) {
+            if(!result.getText().toString().equals("")){
+                currentWords[currentWordsEntered] = result.getText().toString();
+                Log.v("test", "Last word entered: " + currentWords[currentWords.length]);
+                toastHelper("done entering words");
+//            setContentView(R.layout.confirm_words);
+            } else {
+                this.toastHelper("please enter a word");
+            }
+        } else {
+            if(!result.getText().toString().equals("")){
+                currentWords[currentWordsEntered] = result.getText().toString();
+                currentWordsEntered++;
+                result.setText("");
+                currentWordLabel.setText(currentWordsEntered + "/" + wordsPP);
+            } else {
+                this.toastHelper("please enter a word");
+            }
+        }
     }
 
     void toastHelper(String s) {

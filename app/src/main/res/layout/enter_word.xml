@@ -8,15 +8,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">>
+        android:layout_centerInParent="true">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:id="@+id/instructions"
             android:layout_margin="15dp"
             android:fontFamily="@font/coiny"
-            android:text="Provide a word for the game!"/>
+            android:text="_ provide a word for the game"/>
 
         <LinearLayout
             android:id="@+id/wordInputComponent"
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/coiny"
+            android:onClick="changeToConfirmationScreenOrStay"
             android:text="Submit"/>
 
     </LinearLayout>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:background="@color/darkblue">
+    android:background="@color/livid">
 
 <RelativeLayout
     android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/title"
         android:text="Fish Bowl"
-        android:textColor="@color/offwhite"
+        android:textColor="@color/paleCyan"
         android:textSize="50dp"
         app:fontFamily="@font/coiny"
         android:layout_centerHorizontal="true"/>
@@ -30,16 +30,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/blue"
+        android:background="@color/veryLightAzure"
         android:text="New Game"
         android:onClick="changeToTeamNum"
-        android:textColor="@color/offwhite"/>
+        android:textColor="@color/paleCyan"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/blue"
+        android:background="@color/veryLightAzure"
         android:text="Options"
-        android:textColor="@color/offwhite"
+        android:textColor="@color/paleCyan"
         android:layout_marginLeft="10dp" />
 </LinearLayout>
 </RelativeLayout>
