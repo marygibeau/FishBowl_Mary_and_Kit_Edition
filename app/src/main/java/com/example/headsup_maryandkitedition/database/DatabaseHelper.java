@@ -140,6 +140,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return words;
     }
 
+    public void reset() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM "+ TABLE_WORD);
+    }
+
     /**
      * get datetime
      **/
