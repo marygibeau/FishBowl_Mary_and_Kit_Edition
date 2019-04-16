@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             wordsPP = Integer.parseInt(result.getText().toString());
             Log.v("test", "the number of words is: " + wordsPP);
             this.toastHelper("number successfully entered");
-//            setContentView(R.layout.enterwords);
+            setContentView(R.layout.enter_word);
         } else {
             this.toastHelper("Please enter a number");
         }
