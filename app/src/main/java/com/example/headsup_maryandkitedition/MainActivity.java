@@ -5,12 +5,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.headsup_maryandkitedition.database.DatabaseHelper;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
     int currentTeam = 1;
     int wordsPP = 0;
     int currentWordsEntered = 0;
+    int currentPlayer = 0;
     String[] currentWords;
+    int editDropdownPos = 0;
+    DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +85,93 @@ public class MainActivity extends AppCompatActivity {
         } else {
             this.toastHelper("Please enter a number");
         }
+    }
 
+    private void displayWords() {
+        String res = "";
+        for (int i = 0; i < currentWords.length; i++) {
+            if (i != 0 && i % 3 == 0) res += System.getProperty("line.separator");
+            res += "    " + currentWords[i];
+        }
+        TextView list = findViewById(R.id.wordsList);
+        list.setText(res);
+    }
+
+    public void changeToEditWord(View v) {
+        setContentView(R.layout.edit_word);
+
+        final Spinner spinner = findViewById(R.id.spinner);
+        final EditText changeWordInput = findViewById(R.id.changeWordInput);
+
+        List<String> words = Arrays.asList(currentWords);
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this, R.layout.spinner_item, words){
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                return view;
+            }
+        };
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                editDropdownPos = position;
+                // Notify the selected item text
+                toastHelper("Selected: " + selectedItemText);
+                changeWordInput.setText(selectedItemText);
+                changeWordInput.requestFocus();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public void updateWord(View v) {
+        final EditText input = findViewById(R.id.changeWordInput);
+        String updatedWord = input.getText().toString();
+
+        currentWords[editDropdownPos] = updatedWord;
+        setContentView(R.layout.confirm_words);
+        initConfirmWordsView();
+    }
+
+    public void confirmWords(View v) {
+        // insert words in db
+        db = new DatabaseHelper(getApplicationContext());
+        for (String word : currentWords) db.createWord(word, players.get(currentPlayer).getName());
+
+        // logic for going to next player for words or starting game
+        if (currentPlayer == players.size() - 1) {
+            // start game
+        } else {
+            // go to next player
+            // setContentView(R.layout.enter_words);
+            // reset ui for enter_words
+        }
+    }
+
+    private void initConfirmWordsView() {
+        TextView wordsList = findViewById(R.id.wordsList);
+        wordsList.setText(getFormattedWordsList(currentWords));
+    }
+
+    private String getFormattedWordsList(String[] words) {
+        String res = "";
+        for (int i = 0; i < words.length; i++) {
+            if (i != 0 && i % 3 == 0) res += System.getProperty("line.separator");
+            res += "    " + words[i];
+        }
+        return res;
     }
 
     void toastHelper(String s) {
