@@ -48,4 +48,8 @@ public class WordInstance {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String toString() {
+        return getId() + ", " + getPlayerName() + ", " + getWord() + ", " + getGuessSuccess() + ", " + getCreatedAt() + "\n ";
+    }
 }
