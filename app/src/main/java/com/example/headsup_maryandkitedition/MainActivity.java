@@ -107,6 +107,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    void changeToConfirmationScreenOrStay(View v) {
+        EditText result = findViewById(R.id.wordInputBox);
+        TextView currentWordLabel = findViewById(R.id.wordCountLabel);
+        if(currentWordsEntered >= wordsPP - 1) {
+            if(!result.getText().toString().equals("")){
+                currentWords[currentWordsEntered] = result.getText().toString();
+                setContentView(R.layout.confirm_words);
+                initConfirmWordsView();
+            } else {
+                this.toastHelper("please enter a word");
+            }
+        } else {
+            if(!result.getText().toString().equals("")){
+                currentWords[currentWordsEntered] = result.getText().toString();
+                currentWordsEntered++;
+                result.setText("");
+                currentWordLabel.setText(currentWordsEntered + "/" + wordsPP);
+            } else {
+                this.toastHelper("please enter a word");
+            }
+        }
+    }
+
     private void displayWords() {
         String res = "";
         for (int i = 0; i < currentWords.length; i++) {
@@ -192,30 +215,6 @@ public class MainActivity extends AppCompatActivity {
             res += "    " + words[i];
         }
         return res;
-    }
-
-    void changeToConfirmationScreenOrStay(View v) {
-        EditText result = findViewById(R.id.wordInputBox);
-        TextView currentWordLabel = findViewById(R.id.wordCountLabel);
-        if(currentWordsEntered >= wordsPP - 1) {
-            if(!result.getText().toString().equals("")){
-                currentWords[currentWordsEntered] = result.getText().toString();
-                Log.v("test", "Last word entered: " + currentWords[currentWords.length]);
-                toastHelper("done entering words");
-//            setContentView(R.layout.confirm_words);
-            } else {
-                this.toastHelper("please enter a word");
-            }
-        } else {
-            if(!result.getText().toString().equals("")){
-                currentWords[currentWordsEntered] = result.getText().toString();
-                currentWordsEntered++;
-                result.setText("");
-                currentWordLabel.setText(currentWordsEntered + "/" + wordsPP);
-            } else {
-                this.toastHelper("please enter a word");
-            }
-        }
     }
 
     void toastHelper(String s) {
