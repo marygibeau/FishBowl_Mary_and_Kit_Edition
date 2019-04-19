@@ -54,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORD);
         // creating required tables
         db.execSQL(CREATE_TABLE_WORD);
     }
@@ -138,6 +139,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return words;
+    }
+
+    public void reset() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM "+ TABLE_WORD);
     }
 
     /**
