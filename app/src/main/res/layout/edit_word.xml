@@ -27,7 +27,7 @@
         <Button
             android:id="@+id/updateWordButton"
             style="@style/button"
-            android:onClick="updateWord"
+            android:onClick="editWordButton"
             android:text="Update" />
     </LinearLayout>
 

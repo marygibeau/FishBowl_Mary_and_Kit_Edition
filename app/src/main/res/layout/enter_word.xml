@@ -38,7 +38,7 @@
 
         <Button
             style="@style/button"
-            android:onClick="changeToConfirmationScreenOrStay"
+            android:onClick="enterWordsButton"
             android:text="Submit" />
 
     </LinearLayout>

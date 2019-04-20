@@ -29,14 +29,14 @@
             <Button
                 android:id="@+id/changeButton"
                 style="@style/button"
-                android:onClick="changeToEditWord"
+                android:onClick="confirmWordsChangeButton"
                 android:text="Change a word" />
 
             <Button
                 android:id="@+id/confirmButton"
                 style="@style/button"
                 android:layout_marginLeft="10dp"
-                android:onClick="confirmWords"
+                android:onClick="confirmWordsConfirmButton"
                 android:text="Confirm words" />
         </LinearLayout>
 

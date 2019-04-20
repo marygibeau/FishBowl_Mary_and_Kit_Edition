@@ -29,7 +29,7 @@
 
             <Button
                 style="@style/button"
-                android:onClick="changeToTeamNum"
+                android:onClick="mainActivityNewGameButton"
                 android:text="New Game" />
 
             <Button

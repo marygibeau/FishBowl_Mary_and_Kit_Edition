@@ -22,7 +22,7 @@
         <Button
             android:id="@+id/continue3"
             style="@style/button"
-            android:onClick="changeToEnterWords"
+            android:onClick="numberOfWordsButton"
             android:text="Continue" />
     </LinearLayout>
 

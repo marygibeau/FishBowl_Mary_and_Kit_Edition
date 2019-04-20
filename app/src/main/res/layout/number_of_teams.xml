@@ -21,7 +21,7 @@
 
         <Button
             style="@style/button"
-            android:onClick="changeToTeamMembers"
+            android:onClick="numberOfTeamsButton"
             android:text="Continue" />
     </LinearLayout>
 

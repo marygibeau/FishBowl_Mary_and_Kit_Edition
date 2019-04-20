@@ -23,6 +23,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    // region PUBLIC VARIABLES
     int numberOfTeams;
     ArrayList<Player> players = new ArrayList<Player>();
     int currentTeam = 1;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     String[] currentWords;
     int editDropdownPos = 0;
     DatabaseHelper db;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,44 +44,44 @@ public class MainActivity extends AppCompatActivity {
         db.reset();
     }
 
-    void changeToTeamNum(View v) {
+    // region GAMESTATES
+//    game starts here
+    public void mainActivityNewGameButton(View v) {
         setContentView(R.layout.number_of_teams);
     }
 
-    void changeToTeamMembers(View v) {
+//    capture number of teams from edit text
+    public void numberOfTeamsButton(View v) {
         EditText result = findViewById(R.id.numberOfTeams);
         if (!result.getText().toString().equals("")) {
             numberOfTeams = Integer.parseInt(result.getText().toString());
-            Log.v("test", "the number of teams is: " + numberOfTeams);
             setContentView(R.layout.people_on_team);
         } else {
             this.toastHelper("Please enter a number");
         }
     }
 
-    void changeToNumberOfWordsOrStay(View v) {
+//    ask each team for the names of players on their team
+    public void peopleOnTeamButton(View v) {
         TextView instruct = findViewById(R.id.teamNumber);
-        if(currentTeam >= numberOfTeams) {
+//        captures last team's names and then changes to number of words screen
+        if (currentTeam >= numberOfTeams) {
             EditText result = findViewById(R.id.teamNames);
             if (!result.getText().toString().equals("")) {
                 String[] names = result.getText().toString().split(";");
-                Log.v("test", "" + names.length);
                 for (String name : names) {
                     Player cPlayer = new Player(name, currentTeam);
                     players.add(cPlayer);
-                    this.toastHelper("Please enter players' names");
                 }
-                currentTeam++;
-                instruct.setText("Team " + currentTeam);
-                result.setText("");
+                setContentView(R.layout.number_of_words);
             } else {
+                this.toastHelper("Please enter players' names");
             }
-            setContentView(R.layout.number_of_words);
+//            loops through number of teams entered and captures names
         } else {
             EditText result = findViewById(R.id.teamNames);
             if (!result.getText().toString().equals("")) {
                 String[] names = result.getText().toString().split(";");
-                Log.v("test", "" + names.length);
                 for (String name : names) {
                     Player cPlayer = new Player(name, currentTeam);
                     players.add(cPlayer);
@@ -93,13 +95,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void changeToEnterWords(View v) {
+//    captures number of words each person will enter
+    public void numberOfWordsButton(View v) {
         EditText result = findViewById(R.id.wordNumber);
-        Log.v("test", "Length of players: " + players.size());
         if (!result.getText().toString().equals("")) {
             wordsPP = Integer.parseInt(result.getText().toString());
-            Log.v("test", "the number of words is: " + wordsPP);
-            this.toastHelper("number successfully entered");
             currentWords = new String[wordsPP];
             setContentView(R.layout.enter_word);
             initEnterWordsView();
@@ -108,27 +108,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void initEnterWordsView() {
-        TextView instruct = findViewById(R.id.instructions);
-        instruct.setText(players.get(currentPlayer).getName() + " provide a word for the game");
-        TextView wordCountLabel = findViewById(R.id.wordCountLabel);
-        wordCountLabel.setText("0/" + wordsPP);
-        currentWordsEntered = 0;
-    }
-
-    void changeToConfirmationScreenOrStay(View v) {
+//    captures each players words and adds to database
+    public void enterWordsButton(View v) {
         EditText result = findViewById(R.id.wordInputBox);
         TextView currentWordLabel = findViewById(R.id.wordCountLabel);
-        if(currentWordsEntered >= wordsPP - 1) {
-            if(!result.getText().toString().equals("")){
+//        captures last word and then changes to confirm screen
+        if (currentWordsEntered >= wordsPP - 1) {
+            if (!result.getText().toString().equals("")) {
                 currentWords[currentWordsEntered] = result.getText().toString();
                 setContentView(R.layout.confirm_words);
                 initConfirmWordsView();
             } else {
                 this.toastHelper("please enter a word");
             }
+//            captures each word entered by player and changes labels to reflect submitted word
         } else {
-            if(!result.getText().toString().equals("")){
+            if (!result.getText().toString().equals("")) {
                 currentWords[currentWordsEntered] = result.getText().toString();
                 currentWordsEntered++;
                 result.setText("");
@@ -139,17 +134,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void displayWords() {
-        String res = "";
-        for (int i = 0; i < currentWords.length; i++) {
-            if (i != 0 && i % 3 == 0) res += System.getProperty("line.separator");
-            res += "    " + currentWords[i];
-        }
-        TextView list = findViewById(R.id.wordsList);
-        list.setText(res);
-    }
-
-    public void changeToEditWord(View v) {
+//    @kiet comment this
+    public void confirmWordsChangeButton(View v) {
         setContentView(R.layout.edit_word);
 
         final Spinner spinner = findViewById(R.id.spinner);
@@ -159,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing an ArrayAdapter
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
-                this, R.layout.spinner_item, words){
+                this, R.layout.spinner_item, words) {
 
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -188,7 +174,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void updateWord(View v) {
+//    @kiet comment this
+    public void editWordButton(View v) {
         final EditText input = findViewById(R.id.changeWordInput);
         String updatedWord = input.getText().toString();
 
@@ -197,29 +184,67 @@ public class MainActivity extends AppCompatActivity {
         initConfirmWordsView();
     }
 
-    public void confirmWords(View v) {
+//    @kiet comment this
+    public void confirmWordsConfirmButton(View v) {
         // insert words in db
         db = new DatabaseHelper(getApplicationContext());
         for (String word : currentWords) db.createWord(word, players.get(currentPlayer).getName());
         printWordTable(db.getAllWords());
-        
+
         // logic for going to next player for words or starting game
         if (currentPlayer == players.size() - 1) {
             // start game
+            setContentView(R.layout.round1_instructions);
         } else {
             // go to next player
             currentPlayer++;
-             setContentView(R.layout.enter_word);
+            setContentView(R.layout.enter_word);
             // reset ui for enter_words
             initEnterWordsView();
         }
     }
 
+//    start round1 after instructions
+    public void round1InstructButton(View v) {
+        setContentView(R.layout.round1);
+    }
+    // endregion
+
+
+    // region HELPER FUNCTIONS
+//    helps write quick toast messages
+    private void toastHelper(String s) {
+        Toast warning = Toast.makeText(this, s, Toast.LENGTH_LONG);
+        warning.show();
+    }
+
+//    initializes the enter words view with correct text
+    private void initEnterWordsView() {
+        TextView instruct = findViewById(R.id.instructions);
+        instruct.setText(players.get(currentPlayer).getName() + " provide a word for the game");
+        TextView wordCountLabel = findViewById(R.id.wordCountLabel);
+        wordCountLabel.setText("0/" + wordsPP);
+        currentWordsEntered = 0;
+    }
+
+//    initializes the confirm words view with correct text
     private void initConfirmWordsView() {
         TextView wordsList = findViewById(R.id.wordsList);
         wordsList.setText(getFormattedWordsList(currentWords));
     }
 
+//    @kiet comment this
+    private void displayWords() {
+        String res = "";
+        for (int i = 0; i < currentWords.length; i++) {
+            if (i != 0 && i % 3 == 0) res += System.getProperty("line.separator");
+            res += "    " + currentWords[i];
+        }
+        TextView list = findViewById(R.id.wordsList);
+        list.setText(res);
+    }
+
+//    @kiet comment this
     private String getFormattedWordsList(String[] words) {
         String res = "";
         for (int i = 0; i < words.length; i++) {
@@ -229,11 +254,7 @@ public class MainActivity extends AppCompatActivity {
         return res;
     }
 
-    void toastHelper(String s) {
-        Toast warning = Toast.makeText(this, s , Toast.LENGTH_LONG);
-        warning.show();
-    }
-
+//    @kiet comment this
     private void printWordTable(List<WordInstance> words) {
         String res = "\n-----Word Table-----\n";
 
@@ -243,4 +264,5 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("DBTEST", res);
     }
+    // endregion
 }
