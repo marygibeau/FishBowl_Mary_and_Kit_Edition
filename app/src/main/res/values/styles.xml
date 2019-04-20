@@ -7,17 +7,39 @@
         <item name="colorPrimaryDark">@color/brightNavyBlue</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="mainbackground">
         <item name="android:background">@color/brightNavyBlue</item>
     </style>
+
     <style name="background">
         <item name="android:background">@color/paleCyan</item>
     </style>
+
     <style name="button">
         <item name="android:background">@color/livid</item>
         <item name="android:textColor">@color/darkImperialBlue</item>
+        <item name="android:fontFamily">@font/coiny</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="title">
+
+    <style name="text">
         <item name="android:textColor">@color/darkImperialBlue</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:fontFamily">@font/coiny</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="editText">
+        <item name="android:background">@color/isabelline</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">300dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_margin">15dp</item>
     </style>
 </resources>

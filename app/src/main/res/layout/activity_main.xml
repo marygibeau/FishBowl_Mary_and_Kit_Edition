@@ -2,43 +2,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/mainbackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical"
-    style="@style/mainbackground">
+    tools:context=".MainActivity">
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true">
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/title"
-        android:text="Fish Bowl"
-        style="@style/title"
-        android:textSize="50dp"
-        app:fontFamily="@font/coiny"
-        android:layout_centerHorizontal="true"/>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_below="@+id/title"
-    android:layout_centerHorizontal="true">
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/button"
-        android:text="New Game"
-        android:onClick="changeToTeamNum"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/button"
-        android:text="Options"
-        android:layout_marginLeft="10dp" />
-</LinearLayout>
-</RelativeLayout>
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/text"
+            android:layout_centerHorizontal="true"
+            android:text="Fish Bowl"
+            android:textSize="50dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                style="@style/button"
+                android:onClick="mainActivityNewGameButton"
+                android:text="New Game" />
+
+            <Button
+                style="@style/button"
+                android:layout_marginLeft="10dp"
+                android:text="Options" />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

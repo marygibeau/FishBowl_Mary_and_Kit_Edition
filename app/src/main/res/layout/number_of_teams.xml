@@ -1,38 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/aquamarine">
+    android:layout_height="match_parent">
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_centerInParent="true">
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="How many teams are playing?"
-        android:textSize="35dp"
-        android:fontFamily="@font/coiny"
-        android:layout_gravity="center_horizontal"/>
-    <EditText
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:id="@+id/numberOfTeams"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@color/paleCyan"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/paleCyan"
-        android:background="@color/veryLightAzure"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:onClick="changeToTeamMembers"
-        android:text="Continue"/>
-</LinearLayout>
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/text"
+            android:text="How many teams are playing?" />
+
+        <EditText
+            android:id="@+id/numberOfTeams"
+            style="@style/editText"
+            android:inputType="phone" />
+
+        <Button
+            style="@style/button"
+            android:onClick="numberOfTeamsButton"
+            android:text="Continue" />
+    </LinearLayout>
 
 </RelativeLayout>

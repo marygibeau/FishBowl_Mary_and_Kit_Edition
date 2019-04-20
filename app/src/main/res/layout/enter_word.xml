@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:id="@+id/instructions"
+            style="@style/text"
             android:layout_margin="15dp"
-            android:fontFamily="@font/coiny"
-            android:text="_ provide a word for the game"/>
+            android:text="_ provide a word for the game" />
 
         <LinearLayout
             android:id="@+id/wordInputComponent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="15dp">
+            android:layout_gravity="center_horizontal">
+
             <EditText
                 android:id="@+id/wordInputBox"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:fontFamily="@font/coiny"
+                style="@style/editText"
                 android:hint="Enter a word"
                 android:inputType="text" />
+
             <TextView
                 android:id="@+id/wordCountLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/coiny"
-                android:text="Placeholder"/>
+                style="@style/text"
+                android:layout_marginLeft="10dp"
+                android:text="Placeholder" />
         </LinearLayout>
 
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/coiny"
-            android:onClick="changeToConfirmationScreenOrStay"
-            android:text="Submit"/>
+            style="@style/button"
+            android:onClick="enterWordsButton"
+            android:text="Submit" />
 
     </LinearLayout>
 </RelativeLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/background"
+    style="@style/mainbackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,24 +11,20 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/teamNumber"
             style="@style/text"
-            android:text="Team 1"/>
+            android:text="Please Read the following instructions aloud for all players:"
+            android:textSize="20dp" />
 
         <TextView
             style="@style/text"
-            android:text="Enter team members in a semicolon separated list"
-            android:textSize="25dp" />
-
-        <EditText
-            android:id="@+id/teamNames"
-            style="@style/editText"
-            android:inputType="text" />
+            android:padding="25dp"
+            android:text="In round 1, you must get your teammates to try and guess the displayed word by using verbal hints without using the word itself. If you say the word, you must skip the word and it won't count as a point."
+            android:textSize="20dp" />
 
         <Button
             style="@style/button"
-            android:onClick="peopleOnTeamButton"
-            android:text="Continue" />
+            android:text="Continue"
+            android:onClick="round1InstructButton"/>
     </LinearLayout>
 
 </RelativeLayout>
