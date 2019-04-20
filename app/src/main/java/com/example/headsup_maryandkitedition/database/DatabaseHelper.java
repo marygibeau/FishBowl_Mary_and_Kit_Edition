@@ -11,6 +11,7 @@ import com.example.headsup_maryandkitedition.database.model.WordInstance;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -138,6 +139,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
 
+        return words;
+    }
+
+    public List<WordInstance> getWordsByGuessSuccessRandomized(final int guess) {
+        List<WordInstance> words = getWordsByGuessSuccess(guess);
+        Collections.shuffle(words);
         return words;
     }
 
