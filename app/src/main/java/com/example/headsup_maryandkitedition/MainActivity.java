@@ -22,6 +22,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+//    TODO: Mary - check input validity
+//    TODO: Mary - randomize player array so teams rotate
+//    TODO: Kiet - get random word from database
+//    TODO: Mary - create round UI
+//    TODO: Kiet - get random word to be displayed by UI
+//    TODO: Kiet - update number of skips and in-play variables for each word in database during play
+
 
     // region PUBLIC VARIABLES
     int numberOfTeams;
