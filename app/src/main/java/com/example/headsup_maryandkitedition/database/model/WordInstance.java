@@ -4,6 +4,7 @@ public class WordInstance {
     private int id;
     private String playerName;
     private String word;
+    private int skips;
     private int guessSuccess;
     private String createdAt;
 
@@ -19,6 +20,10 @@ public class WordInstance {
 
     public String getWord() {
         return word;
+    }
+
+    public int getSkips() {
+        return skips;
     }
 
     public int getGuessSuccess() {
@@ -39,6 +44,10 @@ public class WordInstance {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public void setSkips(int skips) {
+        this.skips = skips;
     }
 
     public void setGuessSuccess(int guessSuccess) {

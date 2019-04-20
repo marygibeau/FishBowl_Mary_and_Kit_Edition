@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,9 +18,13 @@ import android.widget.Toast;
 import com.example.headsup_maryandkitedition.database.DatabaseHelper;
 import com.example.headsup_maryandkitedition.database.model.WordInstance;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 //    TODO: Mary - check input validity
@@ -38,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     int currentWordsEntered = 0;
     int currentPlayer = 0;
     String[] currentWords;
+    List<WordInstance> playableWords = new ArrayList<>();
+    int currentWordIndex = 0;
     int editDropdownPos = 0;
     DatabaseHelper db;
     //endregion
@@ -214,9 +221,82 @@ public class MainActivity extends AppCompatActivity {
 //    start round1 after instructions
     public void round1InstructButton(View v) {
         setContentView(R.layout.round1);
+        initRound1();
     }
     // endregion
 
+    private void initRound1() {
+        // get all words that haven't been guessed correctly (and shuffled)
+        playableWords = db.getWordsByGuessSuccessRandomized(0);
+
+        startTimer();
+        cycleWords();
+    }
+
+    public void correctGuess(View v) {
+        // update record in db for field guessSuccess
+        WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
+        curr.setGuessSuccess(1);
+
+        db.updateGuessSuccess(curr, 1);
+
+        printWordTable(db.getWordsByGuessSuccess(1));
+
+        currentWordIndex++;
+        cycleWords();
+    }
+
+    public void skipWord(View v) {
+        WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
+        curr.setGuessSuccess(0);
+        curr.setSkips(curr.getSkips() + 1);
+
+        db.updateGuessSuccess(curr, 0);
+
+        printWordTable(db.getWordsByGuessSuccess(0));
+
+        currentWordIndex++;
+        cycleWords();
+    }
+
+    private void startTimer() {
+        final TextView displayedWord = findViewById(R.id.timer);
+        final LinearLayout skipButton = findViewById(R.id.skipButton);
+        final LinearLayout guessedButton = findViewById(R.id.guessedButton);
+
+        final Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int count = 30;
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (count < 0) {
+                            timer.cancel();
+                            displayedWord.setText("Time's up!");
+                            skipButton.setOnClickListener(null);
+                            guessedButton.setOnClickListener(null);
+                            return;
+                        }
+                        displayedWord.setText(count + "");
+                        count--;
+                    }
+                });
+            }
+        }, 1000, 1000);
+    }
+
+    private void cycleWords() {
+        TextView displayedWord = findViewById(R.id.displayedWord);
+        WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
+
+        while (curr.getGuessSuccess() == 1) {
+            currentWordIndex++;
+            curr = playableWords.get(currentWordIndex % playableWords.size());
+        }
+        displayedWord.setText(curr.getWord());
+    }
 
     // region HELPER FUNCTIONS
 //    helps write quick toast messages

@@ -148,6 +148,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return words;
     }
 
+    public void updateGuessSuccess(final WordInstance w, int success) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PLAYER, w.getPlayerName());
+        values.put(KEY_WORD, w.getWord());
+        values.put(KEY_SKIPS, w.getSkips());
+        values.put(KEY_GUESS_SUCCESS, success);
+        values.put(KEY_CREATED_AT, getDateTime());
+
+        db.update(TABLE_WORD, values, KEY_ID + "=" + w.getId(), null);
+    }
+
     public void reset() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+ TABLE_WORD);
