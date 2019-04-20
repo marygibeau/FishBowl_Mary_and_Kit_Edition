@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @kiet comment this
+//  set up selectable dropdown menu of words that player can edit
     public void confirmWordsChangeButton(View v) {
         setContentView(R.layout.edit_word);
 
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    @kiet comment this
+//  player has updated word(s); save word and take back to list of words confirmation
     public void editWordButton(View v) {
         final EditText input = findViewById(R.id.changeWordInput);
         String updatedWord = input.getText().toString();
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         initConfirmWordsView();
     }
 
-//    @kiet comment this
+//  player confirms his/her words and we write words to the db
     public void confirmWordsConfirmButton(View v) {
         // insert words in db
         db = new DatabaseHelper(getApplicationContext());
@@ -240,18 +240,7 @@ public class MainActivity extends AppCompatActivity {
         wordsList.setText(getFormattedWordsList(currentWords));
     }
 
-//    @kiet comment this
-    private void displayWords() {
-        String res = "";
-        for (int i = 0; i < currentWords.length; i++) {
-            if (i != 0 && i % 3 == 0) res += System.getProperty("line.separator");
-            res += "    " + currentWords[i];
-        }
-        TextView list = findViewById(R.id.wordsList);
-        list.setText(res);
-    }
-
-//    @kiet comment this
+//  creates formmatted string of words to be displayed for confirmation
     private String getFormattedWordsList(String[] words) {
         String res = "";
         for (int i = 0; i < words.length; i++) {
@@ -261,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         return res;
     }
 
-//    @kiet comment this
+//  logs content of Word table from db for debugging
     private void printWordTable(List<WordInstance> words) {
         String res = "\n-----Word Table-----\n";
 
