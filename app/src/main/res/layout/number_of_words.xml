@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/aquamarine">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="How many words will each person write?"
-            android:textSize="30dp"
-            android:fontFamily="@font/coiny"
-            android:layout_gravity="center_horizontal"/>
+            style="@style/text"
+            android:text="How many words will each person write?" />
+
         <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
             android:id="@+id/wordNumber"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:background="@color/paleCyan"/>
+            style="@style/editText"
+            android:inputType="phone" />
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/continue3"
+            style="@style/button"
             android:onClick="changeToEnterWords"
-            android:textColor="@color/paleCyan"
-            android:background="@color/veryLightAzure"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="Continue"/>
+            android:text="Continue" />
     </LinearLayout>
 
 </RelativeLayout>
