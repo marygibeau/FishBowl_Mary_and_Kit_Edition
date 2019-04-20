@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 //    TODO: Kiet - get random word to be displayed by UI
 //    TODO: Kiet - update number of skips and in-play variables for each word in database during play
 
+    private static final String ALL_WORDS_GUESSED = "FINISHED";
 
     // region PUBLIC VARIABLES
     int numberOfTeams;
@@ -229,44 +230,46 @@ public class MainActivity extends AppCompatActivity {
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccessRandomized(0);
 
-        startTimer();
+        startTimer(30);
         cycleWords();
     }
 
     public void correctGuess(View v) {
-        // update record in db for field guessSuccess
         WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
-        curr.setGuessSuccess(1);
+        curr.setGuessSuccess(1); // skip -> guessSuccess = 1
 
-        db.updateGuessSuccess(curr, 1);
+        db.updateGuessSuccess(curr, 1); // update record in db
 
-        printWordTable(db.getWordsByGuessSuccess(1));
+        // printWordTable(db.getWordsByGuessSuccess(1));
 
         currentWordIndex++;
         cycleWords();
     }
 
+    // handles updating data when player skips a word
     public void skipWord(View v) {
         WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
-        curr.setGuessSuccess(0);
+        curr.setGuessSuccess(0); // skip -> guessSuccess = 0
         curr.setSkips(curr.getSkips() + 1);
 
-        db.updateGuessSuccess(curr, 0);
+        db.updateGuessSuccess(curr, 0); // update record in db
 
-        printWordTable(db.getWordsByGuessSuccess(0));
+        // printWordTable(db.getWordsByGuessSuccess(0));
 
         currentWordIndex++;
         cycleWords();
     }
 
-    private void startTimer() {
-        final TextView displayedWord = findViewById(R.id.timer);
+    // start the timer for one round
+    private void startTimer(final int timeInSeconds) {
+        final TextView timeCounter = findViewById(R.id.timer);
+        final TextView displayedWord = findViewById(R.id.displayedWord);
         final LinearLayout skipButton = findViewById(R.id.skipButton);
         final LinearLayout guessedButton = findViewById(R.id.guessedButton);
 
         final Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
-            int count = 30;
+            int count = timeInSeconds; // number of seconds per round
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
@@ -274,12 +277,24 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if (count < 0) {
                             timer.cancel();
-                            displayedWord.setText("Time's up!");
+                            timeCounter.setText("Time's up!");
                             skipButton.setOnClickListener(null);
                             guessedButton.setOnClickListener(null);
                             return;
+                        } else { // terminate timer for when all words have been guessed
+                            try {
+                                if (displayedWord.getTag().equals(ALL_WORDS_GUESSED)) {
+                                    timer.cancel();
+                                    skipButton.setOnClickListener(null);
+                                    guessedButton.setOnClickListener(null);
+                                }
+                            } catch (NullPointerException ne) {
+                                ne.printStackTrace();
+                            }
+
                         }
-                        displayedWord.setText(count + "");
+
+                        timeCounter.setText(count + "");
                         count--;
                     }
                 });
@@ -287,11 +302,21 @@ public class MainActivity extends AppCompatActivity {
         }, 1000, 1000);
     }
 
+    // cycle through words for round
     private void cycleWords() {
         TextView displayedWord = findViewById(R.id.displayedWord);
         WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
 
+        // count number of successfuly guessed words
+        int countSuccess = 0;
+
         while (curr.getGuessSuccess() == 1) {
+            countSuccess++;
+            if (countSuccess >= playableWords.size()) { // we've guessed all the words for this round
+                displayedWord.setText("Round over!");
+                displayedWord.setTag(ALL_WORDS_GUESSED);
+                return;
+            }
             currentWordIndex++;
             curr = playableWords.get(currentWordIndex % playableWords.size());
         }
