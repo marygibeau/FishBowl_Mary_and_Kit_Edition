@@ -25,28 +25,32 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 //    TODO: Mary - check input validity
-//    TODO: Mary - randomize player array so teams rotate
-//    TODO: Kiet - get random word from database
-//    TODO: Mary - create round UI
-//    TODO: Kiet - get random word to be displayed by UI
-//    TODO: Kiet - update number of skips and in-play variables for each word in database during play
+//    TODO: Mary - get end screens hooked together and leads back to main
+//    TODO: Mary - Tie logic
+//    TODO: Kiet - display most skipped word and its author
+//    TODO: General - put timer back to 60 seconds when done testing
 
+
+    // region PUBLIC VARIABLES
     private static final String ALL_WORDS_GUESSED = "FINISHED";
     private static int round = 1;
 
-    // region PUBLIC VARIABLES
     int numberOfTeams;
     List<Player>[] playerEntries;
     Player[] players;
+
     int currentTeamName = 1;
     int wordsPP = 0;
     int currentWordsEntered = 0;
     int currentPlayer = 0;
+
     String[] currentWords;
     List<WordInstance> playableWords = new ArrayList<>();
     int currentWordIndex = 0;
+
     int editDropdownPos = 0;
     DatabaseHelper db;
+
     int[] score;
     //endregion
 
@@ -124,10 +128,14 @@ public class MainActivity extends AppCompatActivity {
     public void numberOfWordsButton(View v) {
         EditText result = findViewById(R.id.wordNumber);
         if (!result.getText().toString().equals("")) {
-            wordsPP = Integer.parseInt(result.getText().toString());
-            currentWords = new String[wordsPP];
-            setContentView(R.layout.enter_word);
-            initEnterWordsView();
+            if(Integer.parseInt(result.getText().toString()) <= 0) {
+                this.toastHelper("Please enter a positive number");
+            } else {
+                wordsPP = Integer.parseInt(result.getText().toString());
+                currentWords = new String[wordsPP];
+                setContentView(R.layout.enter_word);
+                initEnterWordsView();
+            }
         } else {
             this.toastHelper("Please enter a number");
         }
@@ -221,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
             if(currentTeamName == playerEntries.length) {
                 // start game
                 rotatePlayers(playerEntries);
+                currentPlayer = 0;
+                currentTeamName = 1;
                 setContentView(R.layout.round_instructions);
                 initRoundInstructionsView();
             } else {
@@ -240,37 +250,45 @@ public class MainActivity extends AppCompatActivity {
 
 //    start round after instructions
     public void roundInstructButton(View v) {
-        setContentView(R.layout.round);
-        currentTeamName = 1;
-        currentPlayer = 0;
-        initRound();
+        setContentView(R.layout.pass_to_player);
+        initPassToPlayerView();
     }
 
     public void passToNextPlayer() {
         if(currentTeamName < players.length) {
             currentTeamName++;
+            currentPlayer = 0;
         } else {
             rotatePlayers(playerEntries);
+            currentPlayer = 0;
             currentTeamName = 1;
         }
         setContentView(R.layout.pass_to_player);
         initPassToPlayerView();
     }
 
-    public void imReadyButton(View v) {
+    public void passToNextPlayerButton(View v) {
         setContentView(R.layout.round);
         initRound();
     }
 
     public void endOfRoundScoreButton(View v) {
-        if(currentTeamName < players.length) {
-            currentTeamName++;
+        if (round <= 3) {
+            if (currentTeamName < players.length) {
+                currentTeamName++;
+            } else {
+                rotatePlayers(playerEntries);
+
+            }
+            setContentView(R.layout.round_instructions);
+            initRoundInstructionsView();
         } else {
-            rotatePlayers(playerEntries);
-            currentTeamName = 1;
+            initFinalScoreView();
         }
-        setContentView(R.layout.round_instructions);
-        initRoundInstructionsView();
+    }
+
+    public void finalScoreButton(View v) {
+        initFinalScoreView();
     }
 
     // endregion
@@ -379,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
                                     // reset guess success state in db
                                     for (WordInstance wi : playableWords) db.updateGuessSuccess(wi, 0);
                                     // go to round 2
-                                    initEndOfRoundScoreView();
+                                        initEndOfRoundScoreView();
                                     return;
                                 }
                             } catch (NullPointerException ne) {
@@ -503,15 +521,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEndOfRoundScoreView() {
-        round++;
-        setContentView(R.layout.end_of_round_score);
+        if(round < 3){
+            setContentView(R.layout.end_of_round_score);
+            TextView roundNum = findViewById(R.id.roundNum);
+            TextView leadTeam = findViewById(R.id.leadTeam);
+            TextView maxPoints = findViewById(R.id.maxPoints);
+
+            roundNum.setText(roundNum.getText().toString() + (round));
+            leadTeam.setText("Team " + (findMaxScoreIndex(score) + 1)+ " is in the lead with");
+            maxPoints.setText(findMaxScore(score) + maxPoints.getText().toString());
+            round++;
+        } else {
+            initFinalScoreView();
+        }
+    }
+
+    private void initFinalScoreView() {
+        if(round == 3) {
+            setContentView(R.layout.final_score);
+            TextView roundNum = findViewById(R.id.roundNum);
+            TextView leadTeam = findViewById(R.id.leadTeam);
+            TextView maxPoints = findViewById(R.id.maxPoints);
+
+            roundNum.setText(roundNum.getText().toString() + round);
+            leadTeam.setText(leadTeam.getText().toString() + (findMaxScoreIndex(score) + 1));
+            maxPoints.setText(findMaxScore(score) + maxPoints.getText().toString());
+            round++;
+        } else if(round == 4){
+            initSkipsScreen();
+            round++;
+        }else {
+            setContentView(R.layout.activity_main);
+        }
+    }
+
+    private void initSkipsScreen() {
+        setContentView(R.layout.final_score);
         TextView roundNum = findViewById(R.id.roundNum);
         TextView leadTeam = findViewById(R.id.leadTeam);
         TextView maxPoints = findViewById(R.id.maxPoints);
 
-        roundNum.setText(roundNum.getText().toString() + (round - 1));
-        leadTeam.setText("Team " + (findMaxScoreIndex(score) + 1)+ " is in the lead with");
-        maxPoints.setText(findMaxScore(score) + maxPoints.getText().toString());
+        roundNum.setText("The most skipped word was:");
+//        @Kiet put the max skipped word and its author in here
+//        leadTeam.setText(<the most skipped word>);
+//        maxPoints.setText("and it was written" + <author of most skipped word>);
     }
 
     private void rotatePlayers(List[] playerEntries) {
@@ -521,6 +574,14 @@ public class MainActivity extends AppCompatActivity {
             playerEntries[i].remove(0);
             players[i] = temp;
             playerEntries[i].add(temp);
+        }
+        currentTeamName = 1;
+        playerTest();
+    }
+
+    private void playerTest(){
+        for (Player p : players) {
+            System.out.println(p.name);
         }
     }
     // endregion
