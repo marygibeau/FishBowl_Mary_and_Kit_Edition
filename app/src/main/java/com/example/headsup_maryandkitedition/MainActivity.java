@@ -246,14 +246,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void passToNextPlayer() {
-        rotatePlayers(playerEntries);
-        currentTeamName = 1;
+        if(currentTeamName < players.length) {
+            currentTeamName++;
+        } else {
+            rotatePlayers(playerEntries);
+        }
         setContentView(R.layout.pass_to_player);
         initPassToPlayerView();
     }
 
     public void imReadyButton(View v) {
-
+        setContentView(R.layout.round);
+        initRound();
     }
 
     // endregion
@@ -276,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.updateGuessSuccess(curr, 1); // update record in db
 
-        score[players[currentTeamName-1].team]++;
+        score[currentTeamName - 1]++;
         // printWordTable(db.getWordsByGuessSuccess(1));
         shufflePlayableWords();
 
@@ -464,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initScore(int numberOfTeams) {
-        score = new int[numberOfTeams-1];
+        score = new int[numberOfTeams];
         for(int i = 0; i < numberOfTeams-1; i++) {
             score[i] = 0;
         }

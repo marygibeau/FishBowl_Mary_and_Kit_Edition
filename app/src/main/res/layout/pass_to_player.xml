@@ -20,7 +20,7 @@
         <Button
             style="@style/button"
             android:text="Ready"
-            android:onClick="passToNextPlayer"/>
+            android:onClick="imReadyButton"/>
     </LinearLayout>
 
 </RelativeLayout>
