@@ -11,20 +11,16 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/text"
-            android:text="Please Read the following instructions aloud for all players:"
-            android:textSize="20dp" />
-
-        <TextView
+            android:id="@+id/passInstruction"
             style="@style/text"
             android:padding="25dp"
-            android:text="In round 1, you must get your teammates to try and guess the displayed word by using verbal hints without using the word itself. If you say the word, you must skip the word and it won't count as a point."
+            android:text="Alrighty! Pass the cellular mobile to "
             android:textSize="20dp" />
 
         <Button
             style="@style/button"
-            android:text="Continue"
-            android:onClick="round1InstructButton"/>
+            android:text="Ready"
+            android:onClick="passToNextPlayer"/>
     </LinearLayout>
 
 </RelativeLayout>

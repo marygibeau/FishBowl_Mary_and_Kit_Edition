@@ -1,6 +1,5 @@
 package com.example.headsup_maryandkitedition;
 
-import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -17,8 +15,6 @@ import android.widget.Toast;
 
 import com.example.headsup_maryandkitedition.database.DatabaseHelper;
 import com.example.headsup_maryandkitedition.database.model.WordInstance;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 //    TODO: Kiet - update number of skips and in-play variables for each word in database during play
 
     private static final String ALL_WORDS_GUESSED = "FINISHED";
+    private static int round = 1;
 
     // region PUBLIC VARIABLES
     int numberOfTeams;
@@ -210,7 +207,8 @@ public class MainActivity extends AppCompatActivity {
         // logic for going to next player for words or starting game
         if (currentPlayer == players.size() - 1) {
             // start game
-            setContentView(R.layout.round1_instructions);
+            setContentView(R.layout.round_instructions);
+            initRoundInstructionsView();
         } else {
             // go to next player
             currentPlayer++;
@@ -220,14 +218,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    start round1 after instructions
-    public void round1InstructButton(View v) {
-        setContentView(R.layout.round1);
-        initRound1();
+//    start round after instructions
+    public void roundInstructButton(View v) {
+        setContentView(R.layout.round);
+        initRound();
     }
     // endregion
 
-    private void initRound1() {
+    public void passToNextPlayer(View v) {
+
+    }
+
+    private void initRound() {
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
 
@@ -285,6 +287,13 @@ public class MainActivity extends AppCompatActivity {
                             timeCounter.setText("Time's up!");
                             skipButton.setOnClickListener(null);
                             guessedButton.setOnClickListener(null);
+                            try {
+                                Thread.sleep(2000);
+                            } catch (Exception e) {
+
+                            }
+                            setContentView(R.layout.pass_to_player);
+                            initPassToPlayerView();
                             return;
                         } else { // terminate timer for when all words have been guessed
                             try {
@@ -292,6 +301,19 @@ public class MainActivity extends AppCompatActivity {
                                     timer.cancel();
                                     skipButton.setOnClickListener(null);
                                     guessedButton.setOnClickListener(null);
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (Exception e) {
+
+                                    }
+                                    // all words have been guessed... go to round 2 immediately
+                                    // reset guess success state in db
+                                    for (WordInstance wi : playableWords) db.updateGuessSuccess(wi, 0);
+                                    // go to round 2
+                                    round++;
+                                    setContentView(R.layout.round_instructions);
+                                    initRoundInstructionsView();
+                                    return;
                                 }
                             } catch (NullPointerException ne) {
                                 ne.printStackTrace();
@@ -319,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
         while (curr.getGuessSuccess() == 1) {
             countSuccess++;
             if (countSuccess >= playableWords.size()) { // we've guessed all the words for this round
-                displayedWord.setText("Round over!");
+                displayedWord.setText("Round over! You've guessed all the words!");
                 displayedWord.setTag(ALL_WORDS_GUESSED);
                 return;
             }
@@ -359,6 +381,31 @@ public class MainActivity extends AppCompatActivity {
     private void initConfirmWordsView() {
         TextView wordsList = findViewById(R.id.wordsList);
         wordsList.setText(getFormattedWordsList(currentWords));
+    }
+
+    private void initRoundInstructionsView() {
+        TextView rI = findViewById(R.id.roundInstruction);
+        switch (round) {
+            case 1:
+                rI.setText("In round 1, you must get your teammates to try and guess the displayed " +
+                        "word by using verbal hints without using the word itself. If you say the word, " +
+                        "you must skip the word and it won't count as a point. You have 60 seconds!");
+                break;
+            case 2:
+                rI.setText("In round 2, ");
+                break;
+            case 3:
+                rI.setText("In round 3, ");
+                break;
+        }
+    }
+
+    private void initPassToPlayerView() {
+        TextView pass = findViewById(R.id.passInstruction);
+        String instruction = pass.getText().toString();
+        // replace with next player's name
+        instruction += "Temp";
+        pass.setText(instruction);
     }
 
 //  creates formmatted string of words to be displayed for confirmation
