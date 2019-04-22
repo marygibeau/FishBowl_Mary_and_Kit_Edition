@@ -244,12 +244,21 @@ public class MainActivity extends AppCompatActivity {
         currentPlayer = 0;
         initRound();
     }
-    // endregion
+
+    public void passToNextPlayer() {
+        rotatePlayers(playerEntries);
+        currentTeamName = 1;
+        setContentView(R.layout.pass_to_player);
+        initPassToPlayerView();
+    }
 
     public void imReadyButton(View v) {
 
     }
 
+    // endregion
+
+    // region HELPER FUNCTIONS
     private void initRound() {
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
@@ -276,8 +285,8 @@ public class MainActivity extends AppCompatActivity {
         currentWordIndex++;
         cycleWords();
     }
-
     // handles updating data when player skips a word
+
     public void skipWord(View v) {
         WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
         curr.setGuessSuccess(0); // skip -> guessSuccess = 0
@@ -293,8 +302,8 @@ public class MainActivity extends AppCompatActivity {
 
         cycleWords();
     }
-
     // start the timer for one round
+
     private void startTimer(final int timeInSeconds) {
         final TextView timeCounter = findViewById(R.id.timer);
         final TextView displayedWord = findViewById(R.id.displayedWord);
@@ -342,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
                                     return;
                                 }
                             } catch (NullPointerException ne) {
-                                ne.printStackTrace();
+//                                ne.printStackTrace();
                             }
 
                         }
@@ -353,13 +362,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }, 1000, 1000);
-    }
-
-    public void passToNextPlayer() {
-        rotatePlayers(playerEntries);
-        currentTeamName = 1;
-        setContentView(R.layout.pass_to_player);
-        initPassToPlayerView();
     }
 
     // cycle through words for round
@@ -394,7 +396,6 @@ public class MainActivity extends AppCompatActivity {
         Collections.shuffle(playableWords);
     }
 
-    // region HELPER FUNCTIONS
 //    helps write quick toast messages
     private void toastHelper(String s) {
         Toast warning = Toast.makeText(this, s, Toast.LENGTH_LONG);
