@@ -46,7 +46,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_WORD + " TEXT, " +
             KEY_GUESS_SUCCESS + " INT," +
             KEY_SKIPS + " INT, " +
-
             KEY_CREATED_AT + " DATETIME" +")";
 
     public DatabaseHelper(Context context) {
@@ -156,6 +155,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_WORD, w.getWord());
         values.put(KEY_SKIPS, w.getSkips());
         values.put(KEY_GUESS_SUCCESS, success);
+        values.put(KEY_CREATED_AT, getDateTime());
+
+        db.update(TABLE_WORD, values, KEY_ID + "=" + w.getId(), null);
+    }
+
+    public void updateSkips(final WordInstance w) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PLAYER, w.getPlayerName());
+        values.put(KEY_WORD, w.getWord());
+        values.put(KEY_SKIPS, w.getSkips());
+        values.put(KEY_GUESS_SUCCESS, w.getGuessSuccess());
         values.put(KEY_CREATED_AT, getDateTime());
 
         db.update(TABLE_WORD, values, KEY_ID + "=" + w.getId(), null);

@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
         curr.setSkips(curr.getSkips() + 1);
 
         db.updateGuessSuccess(curr, 0); // update record in db
+        db.updateSkips(curr);
 
         printWordTable(db.getWordsByGuessSuccess(0));
 
@@ -353,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
     // cycle through words for round
     private void cycleWords() {
         TextView displayedWord = findViewById(R.id.displayedWord);
-        String prev = displayedWord.getText().toString();
+//        String prev = displayedWord.getText().toString();
         WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
 
         // count number of successfully guessed words
@@ -370,10 +371,10 @@ public class MainActivity extends AppCompatActivity {
             curr = playableWords.get(currentWordIndex % playableWords.size());
         }
 
-        if (curr.getWord().equals(prev)) {
-            currentWordIndex++;
-            curr = playableWords.get(currentWordIndex % playableWords.size());
-        }
+//        if (curr.getWord().equals(prev)) {
+//            currentWordIndex++;
+//            curr = playableWords.get(currentWordIndex % playableWords.size());
+//        }
         displayedWord.setText(curr.getWord());
     }
 

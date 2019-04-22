@@ -59,6 +59,11 @@ public class WordInstance {
     }
 
     public String toString() {
-        return getId() + ", " + getPlayerName() + ", " + getWord() + ", " + getGuessSuccess() + ", " + getCreatedAt() + "\n ";
+        return getId() + ", " +
+                getPlayerName() + ", " +
+                getWord() + ", " +
+                getGuessSuccess() + ", " +
+                getSkips() + ", " +
+                getCreatedAt() + "\n ";
     }
 }
