@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     // region PUBLIC VARIABLES
     int numberOfTeams;
-    ArrayList<Player> players = new ArrayList<Player>();
-    int currentTeam = 1;
+    List<Player>[] playerEntries;
+    Player[] players;
+    int currentTeamName = 1;
     int wordsPP = 0;
     int currentWordsEntered = 0;
     int currentPlayer = 0;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     int currentWordIndex = 0;
     int editDropdownPos = 0;
     DatabaseHelper db;
+    int[] score;
     //endregion
 
     @Override
@@ -68,6 +70,12 @@ public class MainActivity extends AppCompatActivity {
         EditText result = findViewById(R.id.numberOfTeams);
         if (!result.getText().toString().equals("")) {
             numberOfTeams = Integer.parseInt(result.getText().toString());
+            playerEntries = new ArrayList[numberOfTeams];
+            players = new Player[numberOfTeams];
+            for(int i = 0; i < playerEntries.length; i++) {
+                playerEntries[i] = new ArrayList<Player>();
+            }
+            initScore(numberOfTeams);
             setContentView(R.layout.people_on_team);
         } else {
             this.toastHelper("Please enter a number");
@@ -78,14 +86,17 @@ public class MainActivity extends AppCompatActivity {
     public void peopleOnTeamButton(View v) {
         TextView instruct = findViewById(R.id.teamNumber);
 //        captures last team's names and then changes to number of words screen
-        if (currentTeam >= numberOfTeams) {
+        if (currentTeamName >= numberOfTeams) {
             EditText result = findViewById(R.id.teamNames);
             if (!result.getText().toString().equals("")) {
                 String[] names = result.getText().toString().split(";");
                 for (String name : names) {
-                    Player cPlayer = new Player(name, currentTeam);
-                    players.add(cPlayer);
+                    Player cPlayer = new Player(name, currentTeamName);
+                    playerEntries[currentTeamName-1].add(cPlayer);
                 }
+                players[currentTeamName - 1] = playerEntries[currentTeamName - 1].get(0);
+                currentTeamName = 1;
+                currentPlayer = 0;
                 setContentView(R.layout.number_of_words);
             } else {
                 this.toastHelper("Please enter players' names");
@@ -96,11 +107,12 @@ public class MainActivity extends AppCompatActivity {
             if (!result.getText().toString().equals("")) {
                 String[] names = result.getText().toString().split(";");
                 for (String name : names) {
-                    Player cPlayer = new Player(name, currentTeam);
-                    players.add(cPlayer);
+                    Player cPlayer = new Player(name, currentTeamName);
+                    playerEntries[currentTeamName-1].add(cPlayer);
                 }
-                currentTeam++;
-                instruct.setText("Team " + currentTeam);
+                players[currentTeamName - 1] = playerEntries[currentTeamName - 1].get(0);
+                currentTeamName++;
+                instruct.setText("Team " + currentTeamName);
                 result.setText("");
             } else {
                 this.toastHelper("Please enter players' names");
@@ -201,14 +213,19 @@ public class MainActivity extends AppCompatActivity {
     public void confirmWordsConfirmButton(View v) {
         // insert words in db
         db = new DatabaseHelper(getApplicationContext());
-        for (String word : currentWords) db.createWord(word, players.get(currentPlayer).getName());
+        for (String word : currentWords) db.createWord(word, playerEntries[currentTeamName - 1].get(currentPlayer).getName());
         printWordTable(db.getAllWords());
 
         // logic for going to next player for words or starting game
-        if (currentPlayer == players.size() - 1) {
-            // start game
-            setContentView(R.layout.round_instructions);
-            initRoundInstructionsView();
+        if (currentPlayer == playerEntries[currentTeamName - 1].size() - 1) {
+            if(currentTeamName == playerEntries.length) {
+                // start game
+                setContentView(R.layout.round_instructions);
+                initRoundInstructionsView();
+            } else {
+                currentTeamName++;
+                currentPlayer = 0;
+            }
         } else {
             // go to next player
             currentPlayer++;
@@ -243,6 +260,8 @@ public class MainActivity extends AppCompatActivity {
 
         db.updateGuessSuccess(curr, 1); // update record in db
 
+        score[playerEntries[currentTeamName - 1].get(currentPlayer).team]++;
+        // printWordTable(db.getWordsByGuessSuccess(1));
         shufflePlayableWords();
 
         printWordTable(db.getWordsByGuessSuccess(1));
@@ -371,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
 //    initializes the enter words view with correct text
     private void initEnterWordsView() {
         TextView instruct = findViewById(R.id.instructions);
-        instruct.setText(players.get(currentPlayer).getName() + " provide a word for the game");
+        instruct.setText(playerEntries[currentTeamName - 1].get(currentPlayer).getName() + " provide a word for the game");
         TextView wordCountLabel = findViewById(R.id.wordCountLabel);
         wordCountLabel.setText("0/" + wordsPP);
         currentWordsEntered = 0;
@@ -427,6 +446,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Log.v("DBTEST", res);
+    }
+
+    private void initScore(int numberOfTeams) {
+        score = new int[numberOfTeams-1];
+        for(int i = 0; i < numberOfTeams-1; i++) {
+            score[i] = 0;
+        }
+    }
+
+    private void rotatePlayers(List[] playerEntries) {
+
+        for (int i = 0; i < playerEntries.length; i++) {
+            Player temp = (Player)playerEntries[i].get(0);
+            playerEntries[i].remove(0);
+            players[i] = temp;
+            playerEntries[i].add(temp);
+        }
     }
     // endregion
 }
