@@ -225,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 currentTeamName++;
                 currentPlayer = 0;
+                setContentView(R.layout.enter_word);
+                initEnterWordsView();
             }
         } else {
             // go to next player
