@@ -264,8 +264,13 @@ public class MainActivity extends AppCompatActivity {
 
     // region HELPER FUNCTIONS
     private void initRound() {
+        // reset guess success state at start of round
+        db.resetGuessSuccessAll();
+
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
+        shufflePlayableWords();
+
         for(int i = 0; i < playerEntries.length; i++) {
             players[i] = playerEntries[i].get(0);
         }

@@ -103,6 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wi.setPlayerName(c.getString(c.getColumnIndex(KEY_PLAYER)));
                 wi.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
                 wi.setGuessSuccess(c.getInt(c.getColumnIndex(KEY_GUESS_SUCCESS)));
+                wi.setSkips(c.getInt(c.getColumnIndex(KEY_SKIPS)));
                 wi.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 words.add(wi);
@@ -146,6 +147,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<WordInstance> words = getWordsByGuessSuccess(guess);
         Collections.shuffle(words);
         return words;
+    }
+
+    public void resetGuessSuccessAll() {
+        List<WordInstance> words = getAllWords();
+        for (WordInstance wi : words) updateGuessSuccess(wi, 0);
     }
 
     public void updateGuessSuccess(final WordInstance w, int success) {
