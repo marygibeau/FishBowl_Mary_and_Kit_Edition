@@ -240,19 +240,24 @@ public class MainActivity extends AppCompatActivity {
 //    start round after instructions
     public void roundInstructButton(View v) {
         setContentView(R.layout.round);
+        currentTeamName = 1;
+        currentPlayer = 0;
         initRound();
     }
     // endregion
 
-    public void passToNextPlayer(View v) {
+    public void imReadyButton(View v) {
 
     }
 
     private void initRound() {
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
+        for(int i = 0; i < playerEntries.length; i++) {
+            players[i] = playerEntries[i].get(0);
+        }
 
-        startTimer(60);
+        startTimer(15); // change to 60 when done testing
         cycleWords();
     }
 
@@ -262,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.updateGuessSuccess(curr, 1); // update record in db
 
-        score[playerEntries[currentTeamName - 1].get(currentPlayer).team]++;
+        score[players[currentTeamName-1].team]++;
         // printWordTable(db.getWordsByGuessSuccess(1));
         shufflePlayableWords();
 
@@ -314,8 +319,7 @@ public class MainActivity extends AppCompatActivity {
                             } catch (Exception e) {
 
                             }
-                            setContentView(R.layout.pass_to_player);
-                            initPassToPlayerView();
+                            passToNextPlayer();
                             return;
                         } else { // terminate timer for when all words have been guessed
                             try {
@@ -349,6 +353,13 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }, 1000, 1000);
+    }
+
+    public void passToNextPlayer() {
+        rotatePlayers(playerEntries);
+        currentTeamName = 1;
+        setContentView(R.layout.pass_to_player);
+        initPassToPlayerView();
     }
 
     // cycle through words for round
@@ -426,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
         TextView pass = findViewById(R.id.passInstruction);
         String instruction = pass.getText().toString();
         // replace with next player's name
-        instruction += "Temp";
+        instruction += players[currentTeamName - 1].getName();
         pass.setText(instruction);
     }
 
