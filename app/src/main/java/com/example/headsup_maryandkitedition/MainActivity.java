@@ -22,6 +22,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -228,9 +229,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRound1() {
         // get all words that haven't been guessed correctly (and shuffled)
-        playableWords = db.getWordsByGuessSuccessRandomized(0);
+        playableWords = db.getWordsByGuessSuccess(0);
 
-        startTimer(30);
+        startTimer(60);
         cycleWords();
     }
 
@@ -240,7 +241,9 @@ public class MainActivity extends AppCompatActivity {
 
         db.updateGuessSuccess(curr, 1); // update record in db
 
-        // printWordTable(db.getWordsByGuessSuccess(1));
+        shufflePlayableWords();
+
+        printWordTable(db.getWordsByGuessSuccess(1));
 
         currentWordIndex++;
         cycleWords();
@@ -254,9 +257,11 @@ public class MainActivity extends AppCompatActivity {
 
         db.updateGuessSuccess(curr, 0); // update record in db
 
-        // printWordTable(db.getWordsByGuessSuccess(0));
+        printWordTable(db.getWordsByGuessSuccess(0));
 
         currentWordIndex++;
+        if (currentWordIndex >= playableWords.size()) shufflePlayableWords();
+
         cycleWords();
     }
 
@@ -305,9 +310,10 @@ public class MainActivity extends AppCompatActivity {
     // cycle through words for round
     private void cycleWords() {
         TextView displayedWord = findViewById(R.id.displayedWord);
+        String prev = displayedWord.getText().toString();
         WordInstance curr = playableWords.get(currentWordIndex % playableWords.size());
 
-        // count number of successfuly guessed words
+        // count number of successfully guessed words
         int countSuccess = 0;
 
         while (curr.getGuessSuccess() == 1) {
@@ -320,7 +326,17 @@ public class MainActivity extends AppCompatActivity {
             currentWordIndex++;
             curr = playableWords.get(currentWordIndex % playableWords.size());
         }
+
+        if (curr.getWord().equals(prev)) {
+            currentWordIndex++;
+            curr = playableWords.get(currentWordIndex % playableWords.size());
+        }
         displayedWord.setText(curr.getWord());
+    }
+
+    // shuffle playableWords
+    private void shufflePlayableWords() {
+        Collections.shuffle(playableWords);
     }
 
     // region HELPER FUNCTIONS
