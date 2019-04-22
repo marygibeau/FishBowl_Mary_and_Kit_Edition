@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         if (currentPlayer == playerEntries[currentTeamName - 1].size() - 1) {
             if(currentTeamName == playerEntries.length) {
                 // start game
+                rotatePlayers(playerEntries);
                 setContentView(R.layout.round_instructions);
                 initRoundInstructionsView();
             } else {
@@ -250,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
             currentTeamName++;
         } else {
             rotatePlayers(playerEntries);
+            currentTeamName = 1;
         }
         setContentView(R.layout.pass_to_player);
         initPassToPlayerView();
@@ -260,9 +262,37 @@ public class MainActivity extends AppCompatActivity {
         initRound();
     }
 
+    public void endOfRoundScoreButton(View v) {
+        if(currentTeamName < players.length) {
+            currentTeamName++;
+        } else {
+            rotatePlayers(playerEntries);
+            currentTeamName = 1;
+        }
+        setContentView(R.layout.round_instructions);
+        initRoundInstructionsView();
+    }
+
     // endregion
 
     // region HELPER FUNCTIONS
+    private int findMaxScoreIndex(int[] score) {
+//        implement tie logic
+        int result = 0;
+        int resultIndex = 0;
+        for(int i = 0; i < score.length; i++) {
+            if(score[i] > result) {
+                result = score[i];
+                resultIndex = i;
+            }
+        }
+        return resultIndex;
+    }
+
+    private int findMaxScore(int[] score) {
+        return score[findMaxScoreIndex(score)];
+    }
+
     private void initRound() {
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
@@ -270,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
             players[i] = playerEntries[i].get(0);
         }
 
-        startTimer(15); // change to 60 when done testing
+        startTimer(5); // change to 60 when done testing
         cycleWords();
     }
 
@@ -349,9 +379,7 @@ public class MainActivity extends AppCompatActivity {
                                     // reset guess success state in db
                                     for (WordInstance wi : playableWords) db.updateGuessSuccess(wi, 0);
                                     // go to round 2
-                                    round++;
-                                    setContentView(R.layout.round_instructions);
-                                    initRoundInstructionsView();
+                                    initEndOfRoundScoreView();
                                     return;
                                 }
                             } catch (NullPointerException ne) {
@@ -472,6 +500,18 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < numberOfTeams-1; i++) {
             score[i] = 0;
         }
+    }
+
+    private void initEndOfRoundScoreView() {
+        round++;
+        setContentView(R.layout.end_of_round_score);
+        TextView roundNum = findViewById(R.id.roundNum);
+        TextView leadTeam = findViewById(R.id.leadTeam);
+        TextView maxPoints = findViewById(R.id.maxPoints);
+
+        roundNum.setText(roundNum.getText().toString() + (round - 1));
+        leadTeam.setText("Team " + (findMaxScoreIndex(score) + 1)+ " is in the lead with");
+        maxPoints.setText(findMaxScore(score) + maxPoints.getText().toString());
     }
 
     private void rotatePlayers(List[] playerEntries) {
