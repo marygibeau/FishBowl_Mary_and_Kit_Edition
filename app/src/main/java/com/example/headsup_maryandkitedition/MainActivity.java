@@ -25,7 +25,6 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 //    TODO: Mary - check input validity
-//    TODO: Mary - get end screens hooked together and leads back to main
 //    TODO: Mary - Tie logic
 //    TODO: Kiet - display most skipped word and its author
 //    TODO: General - put timer back to 60 seconds when done testing
