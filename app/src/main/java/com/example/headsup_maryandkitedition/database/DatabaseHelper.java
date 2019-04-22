@@ -132,6 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wi.setPlayerName(c.getString(c.getColumnIndex(KEY_PLAYER)));
                 wi.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
                 wi.setGuessSuccess(c.getInt(c.getColumnIndex(KEY_GUESS_SUCCESS)));
+                wi.setSkips(c.getInt(c.getColumnIndex(KEY_SKIPS)));
                 wi.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 words.add(wi);
