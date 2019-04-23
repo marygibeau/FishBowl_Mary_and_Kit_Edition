@@ -572,6 +572,7 @@ public class MainActivity extends AppCompatActivity {
         TextView maxPoints = findViewById(R.id.maxPoints);
 
         roundNum.setText("The most skipped word was:");
+//        TODO: Kiet do this
 //        @Kiet put the max skipped word and its author in here
 //        leadTeam.setText(<the most skipped word>);
 //        maxPoints.setText("and it was written" + <author of most skipped word>);
