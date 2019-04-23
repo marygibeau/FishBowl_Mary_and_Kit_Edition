@@ -310,6 +310,11 @@ public class MainActivity extends AppCompatActivity {
         return score[findMaxScoreIndex(score)];
     }
 
+    private int[] findTies(int[] score) {
+
+        return new int[]{-1};
+    }
+
     private void initRound() {
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
