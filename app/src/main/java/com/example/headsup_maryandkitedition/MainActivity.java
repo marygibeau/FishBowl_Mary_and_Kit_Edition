@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRound() {
         // reset guess success state at start of round
-        db.resetGuessSuccessAll();
+        if (db.getWordsByGuessSuccess(0).isEmpty()) db.resetGuessSuccessAll();
 
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
