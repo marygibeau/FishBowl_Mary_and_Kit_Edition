@@ -18,6 +18,7 @@
             style="@style/text"
             android:layout_centerHorizontal="true"
             android:text="Fish Bowl"
+            android:textColor="@color/isabelline"
             android:textSize="50dp" />
 
         <LinearLayout
