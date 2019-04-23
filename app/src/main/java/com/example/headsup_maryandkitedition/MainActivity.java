@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 //    TODO: Mary - check input validity
 //    TODO: Mary - Tie logic
 //    TODO: Kiet - display most skipped word and its author
+//    TODO: Kiet - icon
 //    TODO: General - put timer back to 60 seconds when done testing
 
 
