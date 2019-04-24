@@ -486,10 +486,14 @@ public class MainActivity extends AppCompatActivity {
                         "you must skip the word and it won't count as a point. You have 60 seconds!");
                 break;
             case 2:
-                rI.setText("In round 2, ");
+                rI.setText("In round 2, you must get your teammates to try and guess the displayed word" +
+                        "but this round you can only use one word. If you say any part of the displayed word"+
+                        "you must skip the word and it won't count as a point. You have 60 seconds!");
                 break;
             case 3:
-                rI.setText("In round 3, ");
+                rI.setText("In round 3, you must get your teammates to try and guess the displayed word" +
+                        "but in this round you cannot say any words. You must only use gestures. Sound effects" +
+                        "are allowed but no words. If words are used, skip the word. You have 60 seconds!");
                 break;
         }
     }
@@ -561,7 +565,7 @@ public class MainActivity extends AppCompatActivity {
             initSkipsScreen();
             round++;
         }else {
-            setContentView(R.layout.activity_main);
+            resetGame();
         }
     }
 
@@ -594,6 +598,21 @@ public class MainActivity extends AppCompatActivity {
         for (Player p : players) {
             System.out.println(p.name);
         }
+    }
+
+    private void resetGame() {
+        setContentView(R.layout.activity_main);
+
+        round = 1;
+        currentTeamName = 1;
+        wordsPP = 0;
+        currentWordsEntered = 0;
+        currentPlayer = 0;
+        playableWords = new ArrayList<>();
+        currentWordIndex = 0;
+        editDropdownPos = 0;
+
+        db.reset();
     }
     // endregion
 }
