@@ -13,11 +13,13 @@
         <TextView
             style="@style/text"
             android:text="Please Read the following instructions aloud for all players:"
+            android:textColor="@color/isabelline"
             android:textSize="20dp" />
 
         <TextView
             android:id="@+id/roundInstruction"
             style="@style/text"
+            android:textColor="@color/isabelline"
             android:padding="25dp"
             android:textSize="20dp" />
 

@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 //    TODO: Mary - check input validity
 //    TODO: Mary - Tie logic
 //    TODO: Kiet - display most skipped word and its author
+//    TODO: Kiet - icon
 //    TODO: General - put timer back to 60 seconds when done testing
 
 
@@ -582,7 +583,6 @@ public class MainActivity extends AppCompatActivity {
         WordInstance mostSkipped = skippedWords.get(0);
 
         roundNum.setText("The most skipped word was: ");
-//        @Kiet put the max skipped word and its author in here
         leadTeam.setText(mostSkipped.getWord());
         maxPoints.setText("and it was written by " + mostSkipped.getPlayerName());
     }
