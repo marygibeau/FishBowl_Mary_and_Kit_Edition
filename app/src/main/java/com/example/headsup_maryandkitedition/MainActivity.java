@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRound() {
         // reset guess success state at start of round
-        if (db.getWordsByGuessSuccess(0).isEmpty()) db.resetGuessSuccessAll();
+        // if (playableWords.isEmpty()) db.resetGuessSuccessAll();
 
         // get all words that haven't been guessed correctly (and shuffled)
         playableWords = db.getWordsByGuessSuccess(0);
@@ -356,10 +356,14 @@ public class MainActivity extends AppCompatActivity {
         db.updateGuessSuccess(curr, 0); // update record in db
         db.updateSkips(curr);
 
-        printWordTable(db.getWordsByGuessSuccess(0));
+        // printWordTable(db.getWordsByGuessSuccess(0));
 
         currentWordIndex++;
-        if (currentWordIndex >= playableWords.size()) shufflePlayableWords();
+        if (currentWordIndex >= playableWords.size()) {
+            TextView displayedWord = findViewById(R.id.displayedWord);
+            String currentWord = displayedWord.getText().toString();
+            while (playableWords.get(0).equals(currentWord)) shufflePlayableWords();
+        }
 
         cycleWords();
     }
@@ -395,6 +399,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 if (displayedWord.getTag().equals(ALL_WORDS_GUESSED)) {
                                     timer.cancel();
+                                    displayedWord.setTag("");
                                     skipButton.setOnClickListener(null);
                                     guessedButton.setOnClickListener(null);
                                     try {
@@ -404,9 +409,10 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     // all words have been guessed... go to round 2 immediately
                                     // reset guess success state in db
-                                    for (WordInstance wi : playableWords) db.updateGuessSuccess(wi, 0);
+                                    db.resetGuessSuccessAll();
+                                    currentWordIndex = 0;
                                     // go to round 2
-                                        initEndOfRoundScoreView();
+                                    initEndOfRoundScoreView();
                                     return;
                                 }
                             } catch (NullPointerException ne) {
@@ -570,10 +576,15 @@ public class MainActivity extends AppCompatActivity {
         TextView leadTeam = findViewById(R.id.leadTeam);
         TextView maxPoints = findViewById(R.id.maxPoints);
 
-        roundNum.setText("The most skipped word was:");
+        List<WordInstance> skippedWords = db.getWordsByDescendingSkips();
+        printWordTable(skippedWords);
+
+        WordInstance mostSkipped = skippedWords.get(0);
+
+        roundNum.setText("The most skipped word was: ");
 //        @Kiet put the max skipped word and its author in here
-//        leadTeam.setText(<the most skipped word>);
-//        maxPoints.setText("and it was written" + <author of most skipped word>);
+        leadTeam.setText(mostSkipped.getWord());
+        maxPoints.setText("and it was written by " + mostSkipped.getPlayerName());
     }
 
     private void rotatePlayers(List[] playerEntries) {
