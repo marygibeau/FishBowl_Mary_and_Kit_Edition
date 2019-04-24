@@ -143,6 +143,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return words;
     }
 
+    public List<WordInstance> getWordsByDescendingSkips() {
+        List<WordInstance> words = new ArrayList<>();
+        String selectQuery =
+                "SELECT * FROM " + TABLE_WORD +
+                " ORDER BY " + KEY_SKIPS + " DESC";
+
+        Log.v("QUERYTAG", selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                WordInstance wi = new WordInstance();
+                wi.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                wi.setPlayerName(c.getString(c.getColumnIndex(KEY_PLAYER)));
+                wi.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
+                wi.setGuessSuccess(c.getInt(c.getColumnIndex(KEY_GUESS_SUCCESS)));
+                wi.setSkips(c.getInt(c.getColumnIndex(KEY_SKIPS)));
+                wi.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+
+                words.add(wi);
+            } while (c.moveToNext());
+        }
+
+        return words;
+    }
+
     public List<WordInstance> getWordsByGuessSuccessRandomized(final int guess) {
         List<WordInstance> words = getWordsByGuessSuccess(guess);
         Collections.shuffle(words);
